@@ -39,7 +39,7 @@ const ContextProvider = ({ children }) => {
 const Body = props => {
   const Estilo = useThemeUI().theme.styles
   const [Loading, setLoading] = props.useContext.Loading.DataMain
-  const [Extend, setExtend] = props.useContext.Extend.Order
+  const [Extend, setExtend] = props.useContext.Extend.Cliente
   const [Editado, setEditado] = useContext(StateContext).Editado
 
   const [PedidoData, setPedidoData] = props.useContext.PedidoData
@@ -66,8 +66,8 @@ const ModuloSlim  = () => {
 
           <Flex sx={{ width: "100%", height: "21px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%" }}>
-              <Text sx={Estilo.d1sb}>Pedido:  
-                {PedidoData.Cuenta} - {PedidoData.Id}
+              <Text sx={Estilo.d1sb}>Cliente:  
+                {" " + PedidoData.Nombre + " " + PedidoData.Apellido} 
               </Text>
             </Box>
 
@@ -110,7 +110,7 @@ const ModuloSimple  = () => {
 
           <Flex sx={{ width: "100%", height: "27px", borderBottomStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "0px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%", mb:2 }}>
-              <Text sx={Estilo.d1sb}>Pedido: </Text>
+              <Text sx={Estilo.d1sb}>Cliente: </Text>
             </Box>
 
             <Box sx={{ width: "10%", p:0 }}>
@@ -129,49 +129,48 @@ const ModuloSimple  = () => {
 
           <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
             <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Pedido: </Text>
+              <Text sx={Estilo.d1sb}>Telefono: </Text>
+            </Box>
+            <Box sx={{ width: "54%" }}>
+              <Input {...props.useAcciones.useChangeArray(PedidoData, "Telefono", setPedidoData, setEditado)} />
+            </Box>
+
+            <Box sx={{ width: "14%" }}>
+              <Button
+                width={1}
+                bg={"slategrey"}
+                Disabled={false}
+                onClick={() => {
+                  // Clientes.pull(props)
+                }}
+              >
+                Buscar
+              </Button>
+            </Box>
+
+
+
+          </Flex>
+
+          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
+            <Box sx={{ width: "20%" }}>
+              <Text sx={Estilo.d1sb}>Nombre: </Text>
             </Box>
             <Box sx={{ width: "70%" }}>
-              <Text sx={Estilo.d1s}>{PedidoData.Id}</Text>
+              <Input {...props.useAcciones.useChangeArray(PedidoData, "Nombre", setPedidoData, setEditado)} />
             </Box>
           </Flex>
 
           <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
             <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Fecha: </Text>
+              <Text sx={Estilo.d1sb}>Apellidos: </Text>
             </Box>
             <Box sx={{ width: "70%" }}>
-              <Text sx={Estilo.d1s}>{moment(PedidoData.Fecha).format("DD MMM HH:MM")}</Text>
-            </Box>
-          </Flex>
-
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Cuenta: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              {/* <Text sx={Estilo.d1s}>{PedidoData.Cuenta} - {PedidoData.Id}</Text> */}
-
-              <Input {...props.useAcciones.useChangeArray(PedidoData, "Cuenta", setPedidoData, setEditado)} />
-
-
+              <Input {...props.useAcciones.useChangeArray(PedidoData, "Apellido", setPedidoData, setEditado)} />
             </Box>
           </Flex>
 
 
-
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Notas: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              {/* <Text sx={Estilo.d1s}>{PedidoData.Obv}</Text> */}
-              <Textarea
-                {...props.useAcciones.useChangeArray(PedidoData, "ConsumosObv", setPedidoData, setEditado)}
-                rows={2}
-              />
-            </Box>
-          </Flex>
 
 
           <Flex sx={{ width: "100%", alignItems: "center" }}>
@@ -209,8 +208,8 @@ const ModuloSimple  = () => {
 
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>
-            {(props.useStatus.order()===1 & Extend) ? ModuloSimple() : <div/>}
-            {(props.useStatus.order()===1 & !Extend) ? ModuloSlim() : <div/>}
+            {(props.useStatus.cliente()===1 & Extend) ? ModuloSimple() : <div/>}
+            {(props.useStatus.cliente()===1 & !Extend) ? ModuloSlim() : <div/>}
           </div>
         }
 

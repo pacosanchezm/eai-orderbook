@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, createContext, Suspense } from 
 
 /** @jsx jsx */
 import { ThemeProvider, jsx, Styled, useThemeUI } from "theme-ui"
-import { Flex, Box, Button, Text, Image, Spinner, Grid, Input } from "@theme-ui/components";
+import { Flex, Box, Button, Text, Image, Spinner, Grid, Input, Close } from "@theme-ui/components";
 import Theme from "./theme"
 
 let App
@@ -34,8 +34,14 @@ const Body = props => {
   const [Loading, setLoading] = props.useContext.Loading.Registros
   const [Registros, setRegistros] = props.useContext.Consumos
   const [PedidoData, setPedidoData] = props.useContext.PedidoData
+  const {useAcciones} = props
 
 // -----------------------------------------------------------------------------
+
+const sumRegs = () => Registros.reduce((a, b) => a + Number((b.ConsumoTotal)), 0)
+
+const ctaRegs = () => Registros.reduce((a, b) => a + Number((b.Cantidad)), 0)
+
 
 const Renglon = props => {
   const Estilo = useThemeUI().theme.styles;
@@ -64,6 +70,25 @@ const Renglon = props => {
               <Box sx={{ width: "15%" }}>
                 <Text sx={Estilo.d1s}>$ {Row.ConsumoTotal} </Text>
               </Box>
+
+              <Box sx={{ width: "25px"}}>
+                <Close
+                  sx={{ height: "21px", mb: 0, width: "100%", fontSize: 2, }}
+                  bg={"transparent"}
+                  color={"#A52A2A"}
+                  Disabled={false}
+                  onClick={async () => {
+                    await useAcciones.delConsumo({
+                      Id: Row.Id,
+                    })
+                   }}
+                >
+                  X 
+                </Close>
+              </Box>
+
+
+
             </Flex>
 
             <Flex sx={{ width: "100%", bg: Color }}>
@@ -111,17 +136,17 @@ const Listado = props => {
 
         <Grid sx={{ width: "100%", }} >
             <Flex sx={{ width: "100%"}}>
-              <Box sx={{ width: "75%" }}>
+              <Box sx={{ width: "70%" }}>
                 <Text sx={Estilo.d1s}>
                 </Text>
               </Box>
 
               <Box sx={{ width: "8%" }}>
-                <Text sx={Estilo.d1sb}>{PedidoData.ConsumosCuenta}</Text>
+                <Text sx={Estilo.d1sb}>{ctaRegs()}</Text>
               </Box>
 
               <Box sx={{ width: "14%" }}>
-                <Text sx={Estilo.d1sb}>$ {PedidoData.ConsumosMonto} </Text>
+                <Text sx={Estilo.d1sb}>$ {sumRegs()} </Text>
               </Box>
             </Flex>
 

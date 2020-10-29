@@ -172,31 +172,194 @@ const Filtros = props => {
     <Grid sx={{p:2, m: 2}}>
       <Flex sx={{ width: "100%", bg: "White" }} columns={[1,null,2]}>
 
-        <Box sx={{ width: "20%", m: 3 }}>
+        <Box sx={{ width: "20%", m: 2 }}>
           <Button {...useChangeArray(FiltroProceso, "TOSTADAS", setFiltroProceso)}>
             Tostadas
           </Button>
         </Box>
 
-        <Box sx={{ width: "20%", m:3 }}>
+        <Box sx={{ width: "20%", m:2 }}>
           <Button {...useChangeArray(FiltroProceso, "ENTRADAS", setFiltroProceso)}>
             Entradas
           </Button>
         </Box>
 
-        <Box sx={{ width: "20%", m:3 }}>
+        <Box sx={{ width: "20%", m:2 }}>
           <Button {...useChangeArray(FiltroProceso, "SOPAS", setFiltroProceso)}>
             Sopas
           </Button>
         </Box>
 
-        <Box sx={{ width: "20%", m:3 }}>
+        <Box sx={{ width: "20%", m:2 }}>
           <Button {...useChangeArray(FiltroProceso, "ARROCES", setFiltroProceso)}>
             Arroces
           </Button>
         </Box>
 
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "POKES", setFiltroProceso)}>
+            Pokes
+          </Button>
+        </Box>
+
+
+
+
+
+
       </Flex>
+
+      <Flex sx={{ width: "100%", bg: "White" }} columns={[1,null,2]}>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "NATURALES", setFiltroProceso)}>
+            Naturales
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "CALIENTES", setFiltroProceso)}>
+            Calientes
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "HORNEADOS", setFiltroProceso)}>
+            Horneados
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "VEGETARIANOS", setFiltroProceso)}>
+            Vegetarianos
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "PREMIUM", setFiltroProceso)}>
+            Premium
+          </Button>
+        </Box>
+
+      </Flex>
+
+
+      <Flex sx={{ width: "100%", bg: "White" }} columns={[1,null,2]}>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "PLATILLOS", setFiltroProceso)}>
+            Platillos
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "RAMEN", setFiltroProceso)}>
+            Ramen
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "POSTRES", setFiltroProceso)}>
+            Postres
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "BEBIDAS", setFiltroProceso)}>
+            Bebidas
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "20%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "INFANTIL", setFiltroProceso)}>
+            Infantil
+          </Button>
+        </Box>
+
+      </Flex>
+
+
+      <Flex sx={{ width: "100%", bg: "White" }} columns={[1,null,2]}>
+
+        <Box sx={{ width: "37%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "ROLLO DEL MES", setFiltroProceso)}>
+            Rollo del Mes
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "18%", m:2 }}>
+          <Button {...useChangeArray(FiltroProceso, "EXTRAS", setFiltroProceso)}>
+            Extras
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "18%", m:2 }}>
+          <Button 
+            sx={{ height: "34px", bg: "#66CDAA", width: "100%" }}
+            onClick={
+              ()=>setFiltroProceso({
+                TOSTADAS: {Activo: true, Color: "#4682B4"},
+                ENTRADAS: {Activo: true, Color: "#F4A460"},
+                SOPAS: {Activo: true, Color: "#C71585"},
+                ARROCES: {Activo: true, Color: "#66CDAA"},
+                POKES: {Activo: true, Color: "#66CDAA"},
+                NATURALES: {Activo: true, Color: "#F4A460"},
+                CALIENTES: {Activo: true, Color: "#F4A460"},
+                HORNEADOS: {Activo: true, Color: "#F4A460"},
+                VEGETARIANOS: {Activo: true, Color: "#F4A460"},
+                PREMIUM: {Activo: true, Color: "#F4A460"},
+                PLATILLOS: {Activo: true, Color: "#C71585"},
+                RAMEN: {Activo: true, Color: "#C71585"},
+                POSTRES: {Activo: true, Color: "#C71585"},
+                BEBIDAS: {Activo: true, Color: "#C71585"},
+                INFANTIL: {Activo: true, Color: "#C71585"},
+                "ROLLO DEL MES": {Activo: true, Color: "#C71585"},
+                EXTRAS: {Activo: true, Color: "#C71585"},
+                })
+            }
+        
+              
+              
+              >
+            Todos
+          </Button>
+        </Box>
+
+        <Box sx={{ width: "18%", m:2 }}>
+          <Button 
+            sx={{ height: "34px", bg: "grey", width: "100%" }}
+            onClick={
+              ()=>setFiltroProceso({
+                TOSTADAS: {Activo: false, Color: "#4682B4"},
+                ENTRADAS: {Activo: false, Color: "#F4A460"},
+                SOPAS: {Activo: false, Color: "#C71585"},
+                ARROCES: {Activo: false, Color: "#66CDAA"},
+                POKES: {Activo: false, Color: "#66CDAA"},
+                NATURALES: {Activo: false, Color: "#F4A460"},
+                CALIENTES: {Activo: false, Color: "#F4A460"},
+                HORNEADOS: {Activo: false, Color: "#F4A460"},
+                VEGETARIANOS: {Activo: false, Color: "#F4A460"},
+                PREMIUM: {Activo: false, Color: "#F4A460"},
+                PLATILLOS: {Activo: false, Color: "#C71585"},
+                RAMEN: {Activo: false, Color: "#C71585"},
+                POSTRES: {Activo: false, Color: "#C71585"},
+                BEBIDAS: {Activo: false, Color: "#C71585"},
+                INFANTIL: {Activo: false, Color: "#C71585"},
+                "ROLLO DEL MES": {Activo: false, Color: "#C71585"},
+                EXTRAS: {Activo: false, Color: "#C71585"},
+                })
+            }
+          
+
+            >
+            Ninguno
+          </Button>
+        </Box>
+      </Flex>
+
+
+
+
     </Grid>
   );
 };

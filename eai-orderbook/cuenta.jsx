@@ -37,14 +37,18 @@ const Body = props => {
   const Estilo = useThemeUI().theme.styles
   const [Loading, setLoading] = props.useContext.Loading.DataMain
   const [LoadingRegistros, setLoadingRegistros] = props.useContext.Loading.Registros
-
-  const [PedidoData, setPedidoData] = props.useContext.PedidoData
-
+  const [Registros, setRegistros] = props.useContext.Consumos
   const [Extend, setExtend] = props.useContext.Extend.Cuenta
   const Images = props.useContext.Images
 
 
 // ----------------------------------
+
+const sumRegs = () => Registros.reduce((a, b) => a + Number((b.ConsumoTotal)), 0)
+
+const ctaRegs = () => Registros.reduce((a, b) => a + Number((b.Cantidad)), 0)
+
+
 
 const ModuloSlim  = () => {
   return (
@@ -63,8 +67,8 @@ const ModuloSlim  = () => {
 
           <Flex sx={{ width: "100%", height: "21px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%" }}>
-              <Text sx={Estilo.d1sb}>Tu Cuenta:  
-                {PedidoData.ConsumosCuenta} Artículos - $ {PedidoData.ConsumosMonto}
+              <Text sx={Estilo.d1sb}>Cuenta:  
+                {ctaRegs()} Artículos - $ {sumRegs()}
               </Text>
             </Box>
 
@@ -108,7 +112,7 @@ const ModuloSimple  = () => {
 
           <Flex sx={{ width: "100%", height: "27px", borderBottomStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "0px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%", mb:2 }}>
-              <Text sx={Estilo.d1sb}>Tu Cuenta: </Text>
+              <Text sx={Estilo.d1sb}>Cuenta: </Text>
             </Box>
 
             <Box sx={{ width: "10%", p:0 }}>

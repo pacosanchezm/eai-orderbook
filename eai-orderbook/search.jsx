@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext, createContext, Suspense } from "react"
-import moment from "moment";
-
 
 /** @jsx jsx */
 import { ThemeProvider, jsx, Styled, useThemeUI } from "theme-ui"
-import { Flex, Box, Button, Text, Textarea, Image, Spinner, Grid, Input } from "@theme-ui/components";
+import { Flex, Box, Button, Text, Image, Spinner, Grid, Input } from "@theme-ui/components";
 import Theme from "./theme"
 
 
@@ -18,7 +16,6 @@ const useStateLocal = () => {
     Theme: useState(useContext(createContext(Theme))),
     LoadingSecc1: useState(useContext(createContext(false))),
     Extended: useState(useContext(createContext(false))),
-    Editado: useState(useContext(createContext(false))),
 
   };
 };
@@ -36,13 +33,11 @@ const ContextProvider = ({ children }) => {
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
+
 const Body = props => {
   const Estilo = useThemeUI().theme.styles
   const [Loading, setLoading] = props.useContext.Loading.DataMain
-  const [Extend, setExtend] = props.useContext.Extend.Order
-  const [Editado, setEditado] = useContext(StateContext).Editado
-
-  const [PedidoData, setPedidoData] = props.useContext.PedidoData
+  const [Extend, setExtend] = props.useContext.Extend.Search
   const Images = props.useContext.Images
 
 
@@ -66,8 +61,7 @@ const ModuloSlim  = () => {
 
           <Flex sx={{ width: "100%", height: "21px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%" }}>
-              <Text sx={Estilo.d1sb}>Pedido:  
-                {PedidoData.Cuenta} - {PedidoData.Id}
+              <Text sx={Estilo.d1sb}>Buscar
               </Text>
             </Box>
 
@@ -91,7 +85,6 @@ const ModuloSlim  = () => {
 
 // ----------------------------------
 
-
 const ModuloSimple  = () => {
  // console.log({Images})
   return (
@@ -110,7 +103,7 @@ const ModuloSimple  = () => {
 
           <Flex sx={{ width: "100%", height: "27px", borderBottomStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "0px", mt:2, mb:2 }}>
             <Box sx={{ width: "90%", mb:2 }}>
-              <Text sx={Estilo.d1sb}>Pedido: </Text>
+              <Text sx={Estilo.d1sb}>Buscar</Text>
             </Box>
 
             <Box sx={{ width: "10%", p:0 }}>
@@ -125,82 +118,14 @@ const ModuloSimple  = () => {
             </Box>
           </Flex>
 
-
-
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Pedido: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              <Text sx={Estilo.d1s}>{PedidoData.Id}</Text>
-            </Box>
-          </Flex>
-
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Fecha: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              <Text sx={Estilo.d1s}>{moment(PedidoData.Fecha).format("DD MMM HH:MM")}</Text>
-            </Box>
-          </Flex>
-
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Cuenta: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              {/* <Text sx={Estilo.d1s}>{PedidoData.Cuenta} - {PedidoData.Id}</Text> */}
-
-              <Input {...props.useAcciones.useChangeArray(PedidoData, "Cuenta", setPedidoData, setEditado)} />
-
-
-            </Box>
-          </Flex>
-
-
-
-          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
-            <Box sx={{ width: "20%" }}>
-              <Text sx={Estilo.d1sb}>Notas: </Text>
-            </Box>
-            <Box sx={{ width: "70%" }}>
-              {/* <Text sx={Estilo.d1s}>{PedidoData.Obv}</Text> */}
-              <Textarea
-                {...props.useAcciones.useChangeArray(PedidoData, "ConsumosObv", setPedidoData, setEditado)}
-                rows={2}
-              />
-            </Box>
-          </Flex>
-
-
-          <Flex sx={{ width: "100%", alignItems: "center" }}>
-          <Box sx={{ width: "20%" }}/>
-
-            <Button
-              sx={{ height: "34px", mb: 3, width: "70%" }}
-              bg={Editado ? "#A52A2A":"gray"}
-              Disabled={false}
-              onClick={ async () => {
-                // await setShare(!Share)
-                // if(!Share) {props.useAcciones.addPosition()}
-
-                setEditado(false)
-
-              }}
-            >
-              {Editado ? "Guardar": "Guardado"}
-            </Button>
-          </Flex>
-
+          <Filtros {...props} />
         </Box>
       </Flex>
     </div>
   )
 }
 
-// ----------------------------------
-
+// ------------------------------
 
   try {
 
@@ -209,8 +134,8 @@ const ModuloSimple  = () => {
 
         {Loading ? <Spinner size={17} ml={3} /> : 
           <div>
-            {(props.useStatus.order()===1 & Extend) ? ModuloSimple() : <div/>}
-            {(props.useStatus.order()===1 & !Extend) ? ModuloSlim() : <div/>}
+            {(props.useStatus.search()===1 & Extend) ? ModuloSimple() : <div/>}
+            {(props.useStatus.search()===1 & !Extend) ? ModuloSlim() : <div/>}
           </div>
         }
 
@@ -221,6 +146,36 @@ const ModuloSimple  = () => {
     console.error(e);
   }
 }
+
+// -----------------------------------------------------------------------------
+
+const Filtros = props => {
+  const Estilo = useThemeUI().theme.styles;
+  const [FiltroProceso, setFiltroProceso] = props.useContext.Filtro.Proceso
+  const [Search, setSearch] = props.useContext.Search
+  
+
+  return (
+    <Grid sx={{p:2, m: 2}}>
+      <Flex sx={{ width: "100%", bg: "White" }} columns={[1,null,2]}>
+
+      <Box sx={{ width: "50%", mr:2 }}>
+        <Input {...props.useAcciones.useChange(Search, setSearch)} />
+      </Box>
+
+      </Flex>
+    </Grid>
+  );
+};
+
+// -----------------------------------------------------------------------------
+
+
+
+
+
+
+
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -240,3 +195,4 @@ export default (App = props => {
 });
 
 // -------------------------------------------------------------------------------
+

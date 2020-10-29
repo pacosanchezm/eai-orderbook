@@ -56,7 +56,7 @@ let usedata = function(StateContextM) {
         },
      
 
-        getDetalle: async function(MenuId) {
+        getDetalle: async function(e) {
     
           var axdata = await axios({
             url: graphqlserver,
@@ -91,7 +91,7 @@ let usedata = function(StateContextM) {
                `,
               variables: {
                 Query: {
-                  Id: MenuId
+                  Id: Number(e.Id)
                 }
               }
             }
@@ -155,6 +155,7 @@ let usedata = function(StateContextM) {
                         Cliente
                         Nombre
                         Apellido
+                        Telefono
                         Status
                         Monto
                         Pagado
@@ -188,8 +189,143 @@ let usedata = function(StateContextM) {
 
 
 
+        getDetalle: async function(MenuId) {
+    
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                query Menu($Query: MenuInput) {
+                  Menus {
+                    Consultas {
+                      Amplia1(Query: $Query) {
+                        Id
+                        Precio
+                        PrecioObv
+                        Precio2
+                        PrecioObv2
+                        Precio3
+                        PrecioObv3                      
+                        Producto
+                        ProductosTitulo
+                        ProductosDescripcion
+                        ProductosIcon
+                        ProductosFoto
+                        ProductosFoto2
+                        ProductosFoto3
+                        ProductosVideo
+                        ProductosObv
+                      
+
+                        CategoriasTitulo
+                      }
+                    }
+                  }
+                }
+               `,
+              variables: {
+                Query: {
+                  Id: MenuId
+                }
+              }
+            }
+          });
+    
+          let axdataRes = axdata.data.data.Menus.Consultas.Amplia1[0];
+    
+          if (axdataRes) { return axdataRes
+    
+            // let MiDetalle = {...axdataRes,
+            // "ProductosId": axdataRes.Producto,
+            // "ConsumosPrecio": axdataRes.Precio,
+            // "ConsumosPrecioObv": axdataRes.PrecioObv,
+            // "ConsumosDescuento": [""],
+            // "ConsumosCantidad": 1,
+            // "ConsumosImporte": axdataRes.Precio,
+            // "ConsumosObv": "",
+            // "CategoriasTitulo": axdataRes.CategoriasTitulo,
+            // }
+    
+            // setDetalle(MiDetalle);
+            // this.Extras().get(axdataRes.Producto)
+            // setLoadingDet(false)
+
+
+          } else {return 0}
+        },
+
+
+
+
+
+
+
+
       }
     }, // --- Pedidos
+
+
+
+    Extras: function() {
+
+      return {
+
+        get : async function(e) {
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                query Extras ($Query: ExtraInput) {
+                  Extras {
+                    Consultas {
+                      Amplia1 (Query: $Query) {
+                        Producto
+                        Id
+                        Titulo
+                        Descripcion
+                        ExtrasDetId
+                        ExtrasDetTitulo
+                        ExtrasDetPrecio
+                      }
+                    }
+                  }
+                }
+               `,
+              variables: {
+                Query: {
+                  Producto: Number(e.Id)
+                }
+              }
+            }
+          });
+      
+          let axdataRes = axdata.data.data.Extras.Consultas.Amplia1;
+      
+          if (axdataRes) {
+            let MiExtras = axdataRes.map(row => {
+              return (
+                {...row,
+                  "ExtrasDetCantidad": 0,
+                  "ExtrasDetImporte": 0,
+                }
+              )
+            })
+      
+            return MiExtras
+            
+          } else {return 0}
+        },
+
+
+      };
+    }, // ------- Extras
+
+
+
+
+
 
 
 
@@ -342,7 +478,7 @@ let usedata = function(StateContextM) {
         }.bind(this),
 
 
-        del: async function(ConsumoId) {
+        del: async function(e) {
     
           var axdata = await axios({
             url: graphqlserver,
@@ -359,7 +495,7 @@ let usedata = function(StateContextM) {
                `,
               variables: {
                 Query: {
-                  "Id": ConsumoId,
+                  "Id": e.Id,
                 }
               }
             }
@@ -367,10 +503,8 @@ let usedata = function(StateContextM) {
     
           let axdataRes = axdata.data.data.ConsumosM.Registro.Delete
     
-          if (axdataRes) {
-            this.Consumos().get();
-          }
-        }.bind(this),
+          if (axdataRes) { return 1 } else {return 0}
+        },
 
 
 
