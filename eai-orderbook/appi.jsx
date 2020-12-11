@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useContext, createContext, Suspense } from "react"
 
+import axios from "axios"
+
+
 // ---------- styles
   /** @jsx jsx */ 
   import { ThemeProvider, jsx, Styled, useThemeUI } from "theme-ui"
@@ -8,7 +11,7 @@ import React, { useState, useEffect, useContext, createContext, Suspense } from 
   import "@babel/polyfill"
 
   import { Header, Modal, Segment } from "semantic-ui-react";
-  import "semantic-ui-css/semantic.min.css";
+  //import "semantic-ui-css/semantic.min.css";
 
 
 
@@ -27,6 +30,9 @@ import Order from "./order"
 import Cliente from "./cliente"
 
 import Cuenta from "./cuenta"
+import Share from "./share"
+
+
 
 
 let App;
@@ -54,15 +60,11 @@ const useStateUniv = () => {
       Cat: useState(useContext(createContext(true))),
       Order: useState(useContext(createContext(true))),
       Cliente: useState(useContext(createContext(true))),
-
       Cuenta: useState(useContext(createContext(true))),
-    },
-
-    Modal: {
-      Open: useState(useContext(createContext(false))),
+      Share: useState(useContext(createContext(false))),
+      Extras: useState(useContext(createContext(false))),
 
     },
-
 
     Images: {
       Logo1: useState(useContext(createContext({src: "https://smxai.net/sf/sflogo1.jpg"}))),
@@ -71,6 +73,13 @@ const useStateUniv = () => {
       Flechau: useState(useContext(createContext({src: "https://smxai.net/sf/cs1/arrowu1.png"}))),
     },
     
+    User: {
+      Id: useState(useContext(createContext({UserName: ""}))),
+      Name: useState(useContext(createContext(""))),
+      Sucursal: useState(useContext(createContext(6))),
+    },
+
+
     Empresa: useState(useContext(createContext(1))),
     Sucursal: useState(useContext(createContext({value: 6}))),
     Pedido: useState(useContext(createContext(9999))),
@@ -81,18 +90,21 @@ const useStateUniv = () => {
     Detalle: useState(useContext(createContext({}))),
     DetalleExtras: useState(useContext(createContext([]))),
 
+    Server: useState(useContext(createContext("https://sushifactory.app"))),
 
-
+    Modal: {
+      Open: useState(useContext(createContext(false))),
+    },
 
     Search: useState(useContext(createContext(""))),
 
     Filtro: { 
       Proceso: useState(useContext(createContext({
         TOSTADAS: {Activo: false, Color: "#4682B4"},
-        ENTRADAS: {Activo: false, Color: "#F4A460"},
-        SOPAS: {Activo: false, Color: "#C71585"},
-        ARROCES: {Activo: false, Color: "#66CDAA"},
-        POKES: {Activo: false, Color: "#66CDAA"},
+        ENTRADAS: {Activo: false, Color: "#4682B4"},
+        SOPAS: {Activo: false, Color: "#4682B4"},
+        ARROCES: {Activo: false, Color: "#4682B4"},
+        POKES: {Activo: false, Color: "#4682B4"},
         NATURALES: {Activo: false, Color: "#F4A460"},
         CALIENTES: {Activo: false, Color: "#F4A460"},
         HORNEADOS: {Activo: false, Color: "#F4A460"},
@@ -103,9 +115,9 @@ const useStateUniv = () => {
         POSTRES: {Activo: false, Color: "#C71585"},
         BEBIDAS: {Activo: false, Color: "#C71585"},
         INFANTIL: {Activo: false, Color: "#C71585"},
-        "ROLLO DEL MES": {Activo: false, Color: "#C71585"},
-        EXTRAS: {Activo: false, Color: "#C71585"},
-        TODOS: {Activo: true, Color: "#C71585"},
+        "ROLLO DEL MES": {Activo: false, Color: "#66CDAA"},
+        EXTRAS: {Activo: false, Color: "#66CDAA"},
+        TODOS: {Activo: true, Color: "#66CDAA"},
 
       }))),
     },
@@ -133,8 +145,9 @@ let useStatus = function(StateContextM) {
     cat: function() { return 1 },
     order: function() { return 1 },
     cliente: function() { return 1 },
-
     cuenta: function() { return 1 },
+    share: function() { return 1 },
+
   }
 }
 
@@ -152,7 +165,9 @@ let useAcciones = function(StateContext) {
   const [DetalleExtras, setDetalleExtras] = useContext(StateContext).DetalleExtras
   const [LoadingDetalle, setLoadingDetalle] = useContext(StateContext).Loading.Detalle
 
-
+  const [UserId, setUserId] = useContext(StateContext).User.Id
+  const [UserName, setUserName] = useContext(StateContext).User.Name
+  const [Sucursal, setSucursal] = useContext(StateContext).User.Sucursal
   // ---------------------
   
   return {
@@ -185,18 +200,56 @@ let useAcciones = function(StateContext) {
     },
 
 
-
+    getUser : async (props) => {
+      try {
+        const res = await axios.get(server + '/logindata')
+        setUserId(res.data.miid)
+        setUserName(res.data.miuser)
+        setSucursal(res.data.misucursal)
+        return res.data
+      } catch (e) { console.error(e) }
+    },
 
 
 
 
     Loader : async function (props) {
+
       setLoadingDataMain(true)
-        let useDataRes = await useData.Pedidos().get({Id: props.id})
-        setPedidoData(useDataRes[0])
-        // let useDataRes = await useData.Productos().get({Sucursal: 6})
-        // setRegistros(useDataRes)
+
+      let miuser = await this.getUser()
+
+      
+      if (UserId) {
+
+        if (props.opt===3){
+          let newOrder = await useData.Pedidos().add({Sucursal: Sucursal})
+          console.log({newOrder})
+          let useDataRes = await useData.Pedidos().get({Id: newOrder})
+          console.log({useDataRes})
+          setPedidoData(useDataRes[0])
+
+        } else {
+
+          let useDataRes = await useData.Pedidos().get({Id: props.id})
+          setPedidoData(useDataRes[0])
+
+        }
+
+
+      }
+
+
+
+
       setLoadingDataMain(false)
+
+
+
+
+
+
+
     },
 
     LoaderCat : async function (e) {
@@ -243,7 +296,25 @@ let useAcciones = function(StateContext) {
 
      },
 
+     
+     
+     upPedido : async function (e) {
+      // setLoadingDataMain(true)
+ 
+         let useDataRes = await useData.Pedidos().up({
+          Id: PedidoData.Id,
+          Cliente: PedidoData.Cliente,
+          Cuenta: PedidoData.Cuenta,
+          TipoEntrega: PedidoData.TipoEntrega,
+          Monto: e.Monto ? e.Monto : Consumos.reduce((a, b) => a + Number((b.ConsumoTotal)), 0),
+          Obv: PedidoData.Obv,
+         })
 
+         if (useDataRes===1) { return 1} else { return 0}
+ 
+       //  setRegistros(useDataRes)
+     // setLoadingDataMain(false)
+     },
 
 
 
@@ -253,6 +324,14 @@ let useAcciones = function(StateContext) {
 
         let useDataRes = await useData.Consumos().get2(PedidoData.Id)
         setConsumos(useDataRes)
+
+        this.upPedido({
+          Monto: useDataRes.reduce((a, b) => a + Number((b.ConsumoTotal)), 0),
+        })
+
+
+
+
 
       //  setRegistros(useDataRes)
     // setLoadingDataMain(false)
@@ -266,9 +345,95 @@ let useAcciones = function(StateContext) {
          let useDataRes = await useData.Consumos().get2(PedidoData.Id)
          setConsumos(useDataRes)
  
+         this.upPedido({
+          Monto: useDataRes.reduce((a, b) => a + Number((b.ConsumoTotal)), 0),
+        })
+
        //  setRegistros(useDataRes)
      // setLoadingDataMain(false)
      },
+
+
+     pullCliente : async function (e) {
+      // setLoadingDataMain(true)
+        let useDataResC = await useData.Clientes().pull(e)
+          await setPedidoData({
+          ...PedidoData,
+          Cliente: useDataResC.Id,
+          Nombre: useDataResC.Nombre,
+          Apellido: useDataResC.ApellidoPat
+        });
+
+
+
+       //  setRegistros(useDataRes)
+     // setLoadingDataMain(false)
+     },
+
+     upCliente : async function (e) {
+      // setLoadingDataMain(true)
+         let useDataResC = await useData.Clientes().up(e)
+          console.log({useDataResC})
+
+         let useDataRes = await useData.Pedidos().up({
+          Id: PedidoData.Id,
+          Cliente: PedidoData.Cliente,
+          Cuenta: PedidoData.Cuenta,
+          Monto: PedidoData.Monto,
+          Obv: PedidoData.Obv,
+         })
+
+        return useDataResC
+
+
+
+       //  setRegistros(useDataRes)
+     // setLoadingDataMain(false)
+     },
+
+
+
+
+     sendSms : async function (e) {
+
+         let useDataRes = await useData.Pedidos().sendSms({
+          Telefono: PedidoData.Telefono,
+          Nombre: PedidoData.Nombre,
+          Codigo: PedidoData.Codigo,
+          Sucursal: PedidoData.Sucursal
+         })
+
+        return useDataRes
+     },
+
+
+
+
+     sendSms2 : async function (e) {
+
+      let useDataRes = await useData.Pedidos().sendSms2({
+       Telefono: PedidoData.Telefono,
+       Nombre: PedidoData.Nombre,
+       Codigo: PedidoData.Codigo,
+       Sucursal: PedidoData.Sucursal
+      })
+
+     return useDataRes
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -336,6 +501,7 @@ try {
               useContext={useContext(StateContext)}
              // useAcciones = {useacciones}
                useStatus = {usestatus}
+               head = "Menú"
             />
             
             <Box css={{ height: "1px" }} />
@@ -382,6 +548,7 @@ try {
 
 
 
+
 // -----------------------------------------------------------------------------
 
 
@@ -407,6 +574,7 @@ try {
               useContext={useContext(StateContext)}
              // useAcciones = {useacciones}
                useStatus = {usestatus}
+               head = "Orden"
             />
             
             <Box css={{ height: "1px" }} />
@@ -431,6 +599,13 @@ try {
               useAcciones = {useacciones}
               useStatus = {usestatus}
             />
+
+            <Share 
+              useContext={useContext(StateContext)}
+              useAcciones = {useacciones}
+              useStatus = {usestatus}
+            />
+
 
           </main>
 
@@ -467,9 +642,11 @@ export default (App = props => {
             display: "flex",
             flexDirection: "column",
             // justifyContent: 'center',
-            mr:7
+            mr:5,
+            width: "100%",
+            minWidth: "375px"
           }}
-          css={{ maxWidth: "768px", minWidth: "375px" }}
+          css={{ maxWidth: "550px", minWidth: "400px" }}
         >
           <header sx={{width: "100%"}}>
           </header>
@@ -487,7 +664,7 @@ export default (App = props => {
             flexDirection: "column",
             //justifyContent: 'center'
           }}
-          css={{ maxWidth: "768px", minWidth: "375px" }}
+          css={{ maxWidth: "768px", minWidth: "400px" }}
         >
           <header sx={{width: "100%"}}>
           </header>

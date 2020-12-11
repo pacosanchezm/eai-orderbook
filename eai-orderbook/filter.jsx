@@ -295,14 +295,14 @@ const Filtros = props => {
 
         <Box sx={{ width: "18%", m:2 }}>
           <Button 
-            sx={{ height: "34px", bg: "#66CDAA", width: "100%" }}
+            sx={{ height: "34px", bg: "grey", width: "100%" }}
             onClick={
               ()=>setFiltroProceso({
                 TOSTADAS: {Activo: true, Color: "#4682B4"},
-                ENTRADAS: {Activo: true, Color: "#F4A460"},
-                SOPAS: {Activo: true, Color: "#C71585"},
-                ARROCES: {Activo: true, Color: "#66CDAA"},
-                POKES: {Activo: true, Color: "#66CDAA"},
+                ENTRADAS: {Activo: true, Color: "#4682B4"},
+                SOPAS: {Activo: true, Color: "#4682B4"},
+                ARROCES: {Activo: true, Color: "#4682B4"},
+                POKES: {Activo: true, Color: "#4682B4"},
                 NATURALES: {Activo: true, Color: "#F4A460"},
                 CALIENTES: {Activo: true, Color: "#F4A460"},
                 HORNEADOS: {Activo: true, Color: "#F4A460"},
@@ -313,8 +313,8 @@ const Filtros = props => {
                 POSTRES: {Activo: true, Color: "#C71585"},
                 BEBIDAS: {Activo: true, Color: "#C71585"},
                 INFANTIL: {Activo: true, Color: "#C71585"},
-                "ROLLO DEL MES": {Activo: true, Color: "#C71585"},
-                EXTRAS: {Activo: true, Color: "#C71585"},
+                "ROLLO DEL MES": {Activo: true, Color: "#66CDAA"},
+                EXTRAS: {Activo: true, Color: "#66CDAA"},
                 })
             }
         
@@ -331,10 +331,10 @@ const Filtros = props => {
             onClick={
               ()=>setFiltroProceso({
                 TOSTADAS: {Activo: false, Color: "#4682B4"},
-                ENTRADAS: {Activo: false, Color: "#F4A460"},
-                SOPAS: {Activo: false, Color: "#C71585"},
-                ARROCES: {Activo: false, Color: "#66CDAA"},
-                POKES: {Activo: false, Color: "#66CDAA"},
+                ENTRADAS: {Activo: false, Color: "#4682B4"},
+                SOPAS: {Activo: false, Color: "#4682B4"},
+                ARROCES: {Activo: false, Color: "#4682B4"},
+                POKES: {Activo: false, Color: "#4682B4"},
                 NATURALES: {Activo: false, Color: "#F4A460"},
                 CALIENTES: {Activo: false, Color: "#F4A460"},
                 HORNEADOS: {Activo: false, Color: "#F4A460"},
@@ -345,8 +345,8 @@ const Filtros = props => {
                 POSTRES: {Activo: false, Color: "#C71585"},
                 BEBIDAS: {Activo: false, Color: "#C71585"},
                 INFANTIL: {Activo: false, Color: "#C71585"},
-                "ROLLO DEL MES": {Activo: false, Color: "#C71585"},
-                EXTRAS: {Activo: false, Color: "#C71585"},
+                "ROLLO DEL MES": {Activo: false, Color: "#66CDAA"},
+                EXTRAS: {Activo: false, Color: "#66CDAA"},
                 })
             }
           

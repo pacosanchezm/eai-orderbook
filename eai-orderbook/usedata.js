@@ -3,8 +3,8 @@ import axios from "axios"
 
 // ------------------------------------------------------------------
 
-let graphqlserver = "https://8t8jt.sse.codesandbox.io/gql"
-// let graphqlserver = "https://smxai.net/graphqleai2"
+  // let graphqlserver = "https://8t8jt.sse.codesandbox.io/gql"
+  let graphqlserver = "https://smxai.net/graphqleai2"
 
 
 let usedata = function(StateContextM) {
@@ -148,6 +148,7 @@ let usedata = function(StateContextM) {
                     Consultas{
                       PedidoResumenSuma(Query: $Query ){
                         Id
+                        Codigo
                         Fecha
                         Cuenta
                         Sucursal
@@ -183,6 +184,7 @@ let usedata = function(StateContextM) {
           });
     
           let axdataRes = axdata.data.data.Pedidos.Consultas.PedidoResumenSuma
+          console.log({axdataRes})
 
           if (axdataRes) {return axdataRes} else {return 0}
         },
@@ -234,26 +236,156 @@ let usedata = function(StateContextM) {
     
           let axdataRes = axdata.data.data.Menus.Consultas.Amplia1[0];
     
-          if (axdataRes) { return axdataRes
-    
-            // let MiDetalle = {...axdataRes,
-            // "ProductosId": axdataRes.Producto,
-            // "ConsumosPrecio": axdataRes.Precio,
-            // "ConsumosPrecioObv": axdataRes.PrecioObv,
-            // "ConsumosDescuento": [""],
-            // "ConsumosCantidad": 1,
-            // "ConsumosImporte": axdataRes.Precio,
-            // "ConsumosObv": "",
-            // "CategoriasTitulo": axdataRes.CategoriasTitulo,
-            // }
-    
-            // setDetalle(MiDetalle);
-            // this.Extras().get(axdataRes.Producto)
-            // setLoadingDet(false)
-
-
-          } else {return 0}
+          if (axdataRes) { return axdataRes} else {return 0}
         },
+
+        up : async function(e) {
+
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                mutation upPedido ($Query: PedidoInput ) {
+                  PedidosM {
+                    Registro {
+                      UpdatePedido (Query: $Query)
+                    }
+                  }
+                }
+              `,
+              variables: {
+                Query: {
+                  Id: Number(e.Id),
+                  Cliente: e.Cliente,
+                  Cuenta: e.Cuenta,
+                  TipoEntrega: e.TipoEntrega,
+                  Monto: Number(e.Monto),
+                  Obv: e.Obv
+                }
+              }
+            }
+          });
+    
+          if (axdata.data.data) { return 1
+            // console.log("Guardado");
+            // await this.Clientes().up();
+            // setEditado(false);
+            // this.Pedidos().getLista();
+          } else {return 0}
+          
+        },
+
+        add : async function(e) {
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                mutation AddPedido ($Query: PedidoInput ) {
+                  PedidosM {
+                    Registro {
+                      InsertPedido (Query: $Query)
+                    }
+                  }
+                }
+               `,
+              variables: {
+                Query: {
+                  Sucursal: e.Sucursal,
+                  Cliente: e.Cliente ? e.Cliente : null,
+                  Referido: e.Referido ? e.Referido : null,
+                }
+              }
+            }
+          });
+    
+          let axdataRes = axdata.data.data.PedidosM.Registro.InsertPedido;
+          if (axdataRes) { return axdataRes} else {return 0}
+          
+        },
+
+
+
+
+
+        sendSms: async function(e) {
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                mutation sendsms ($Query: PedidoInput ) {
+                  PedidosM {
+                    Envios {
+                      Sms (Query: $Query)
+                    }
+                  }
+                }
+               `,
+              variables: {
+                Query: {
+                  Telefono: e.Telefono,
+                  Nombre: e.Nombre,
+                  Codigo: e.Codigo,
+                  Sucursal: e.Sucursal
+                }
+              }
+            }
+          });
+    
+          let axdataRes = axdata.data.data.PedidosM.Envios.Sms;
+          console.log(axdataRes);
+          if (axdataRes) {
+            console.log("Mandado:" + axdataRes);
+            return 1;
+          } else {
+            return 0;
+          }
+        },
+
+
+
+        sendSms2: async function(e) {
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                mutation sendsms ($Query: PedidoInput ) {
+                  PedidosM {
+                    Envios {
+                      Sms2 (Query: $Query)
+                    }
+                  }
+                }
+               `,
+              variables: {
+                Query: {
+                  Telefono: e.Telefono,
+                  Nombre: e.Nombre,
+                  Codigo: e.Codigo,
+                  Sucursal: e.Sucursal
+                }
+              }
+            }
+          });
+    
+          let axdataRes = axdata.data.data.PedidosM.Envios.Sms2;
+          console.log(axdataRes);
+          if (axdataRes) {
+            console.log("Mandado:" + axdataRes);
+            return 1;
+          } else {
+            return 0;
+          }
+        },
+
+
+
+
+
+
 
 
 
@@ -517,10 +649,74 @@ let usedata = function(StateContextM) {
 
 
 
+    Clientes: function() {
+
+      return {
+        pull: async function(e) {
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                mutation PullCliente ($Query: ClienteInput ) {
+                  PedidosM {
+                    Pull {
+                      Cliente (Query: $Query)  {
+                        Id
+                        Nombre
+                        ApellidoPat
+                      }
+                    }
+                  }
+                }
+               `,
+              variables: {
+                Query: {
+                  Telefono: e.Telefono
+                }
+              }
+            }
+          });
+
+          let axdataRes = axdata.data.data.PedidosM.Pull.Cliente
+          if (axdataRes) { return axdataRes } else {return 0}
+
+        },
 
 
+        up: async function(e) {
+          var axdata = await axios({
+            url: graphqlserver,
+            method: "post",
+            data: {
+              query: `
+                mutation upCliente ($Query: ClienteBono ) {
+                  PedidosM {
+                    Registro {
+                      UpdateCliente (Query: $Query) 
+                    }
+                  }
+                }
+               `,
+              variables: {
+                Query: {
+                  Id: e.Cliente,
+                  Telefono: e.Telefono,
+                  Nombre: e.Nombre,
+                  ApellidoPat: e.Apellido
+                }
+              }
+            }
+          });
+
+          let axdataRes = axdata.data.data.PedidosM.Registro.UpdateCliente
+          if (axdataRes) { return axdataRes } else {return 0}
+
+        },
 
 
+      };
+    }, // ------- Clientes
 
 
 

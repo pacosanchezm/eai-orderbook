@@ -19,7 +19,6 @@ const useStateLocal = () => {
     LoadingSecc1: useState(useContext(createContext(false))),
     Extended: useState(useContext(createContext(false))),
     Editado: useState(useContext(createContext(false))),
-
   };
 };
 
@@ -150,15 +149,46 @@ const ModuloSimple  = () => {
               <Text sx={Estilo.d1sb}>Cuenta: </Text>
             </Box>
             <Box sx={{ width: "70%" }}>
-              {/* <Text sx={Estilo.d1s}>{PedidoData.Cuenta} - {PedidoData.Id}</Text> */}
-
               <Input {...props.useAcciones.useChangeArray(PedidoData, "Cuenta", setPedidoData, setEditado)} />
-
-
             </Box>
           </Flex>
 
+          <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
+            <Box sx={{ width: "20%" }}>
+              <Text sx={Estilo.d1sb}>Entrega: </Text>
+            </Box>
 
+
+
+            <Flex sx={{ width: "70%", }}>
+
+              <Button
+                sx={{ width: "50%" }}
+                bg={PedidoData.TipoEntrega==="1" ? "green":"gray"}
+                Disabled={false}
+                onClick={ async () => {
+                  setPedidoData({ ...PedidoData, TipoEntrega: "1"})
+                  setEditado(true)
+                }}
+              >
+                ToGo
+              </Button>
+
+              <Button
+                sx={{ width: "50%", ml: 2 }}
+                bg={PedidoData.TipoEntrega==="2" ? "green":"gray"}
+                Disabled={false}
+                onClick={ async () => {
+                  setPedidoData({ ...PedidoData, TipoEntrega: "2"})
+                  setEditado(true)
+                }}
+              >
+                Domicilio
+              </Button>
+
+            </Flex>
+
+          </Flex>
 
           <Flex sx={{ width: "100%", alignItems: 'center', mb: 3, ml: 3 }}>
             <Box sx={{ width: "20%" }}>
@@ -167,7 +197,7 @@ const ModuloSimple  = () => {
             <Box sx={{ width: "70%" }}>
               {/* <Text sx={Estilo.d1s}>{PedidoData.Obv}</Text> */}
               <Textarea
-                {...props.useAcciones.useChangeArray(PedidoData, "ConsumosObv", setPedidoData, setEditado)}
+                {...props.useAcciones.useChangeArray(PedidoData, "Obv", setPedidoData, setEditado)}
                 rows={2}
               />
             </Box>
@@ -182,11 +212,8 @@ const ModuloSimple  = () => {
               bg={Editado ? "#A52A2A":"gray"}
               Disabled={false}
               onClick={ async () => {
-                // await setShare(!Share)
-                // if(!Share) {props.useAcciones.addPosition()}
-
-                setEditado(false)
-
+                let useDataRes = await props.useAcciones.upPedido({})
+                if (useDataRes===1) { setEditado(false) } else {}
               }}
             >
               {Editado ? "Guardar": "Guardado"}

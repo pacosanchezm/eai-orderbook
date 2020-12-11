@@ -187,9 +187,12 @@ const OpcionesPrecio  = () => {
 try {
 
   return (
+  <div>
+
     <Grid sx={{p:0, m: 0, borderStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "5px"}}>
 
       {Loading ? <Spinner size={17} ml={3} /> : 
+    
         <div>
           <Flex sx={{ width: "100%" }}>
             <Box
@@ -245,6 +248,7 @@ try {
               />
             </Box>
           </Flex>
+          <Box css={{ height: 11 }} />
 
           <Flex sx={{ width: "100%" }}>
             <Text
@@ -279,6 +283,7 @@ try {
           </Flex>
 
 
+          <Box css={{ height: 11 }} />
 
 
 
@@ -315,15 +320,44 @@ try {
 
 
 
+
+
+       
+         
+
+
+ </div>
+       
+
+      }
+
+
+ </Grid>
+
+    
+          <Box css={{ height: 7 }} />
+
+
+
+      <Grid sx={{p:0, m: 0, borderStyle: "solid", borderWidth:1, borderColor: "#D3D3D3", borderRadius: "5px"}}>
+
+
           <Extras {...props}
             texto="Producto"
             useContext={props.useContext}
+            sumExtras={sumExtras()}
           />
 
-        </div>
-      }
+      </Grid>
 
-    </Grid>
+
+
+
+  </div>
+
+
+
+
   )
   
 } catch (e) {

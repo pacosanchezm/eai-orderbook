@@ -58,7 +58,7 @@ const ModuloSimple  = () => {
         </Box> */}
 
 
-        Menu
+        {props.head}
 
       </Flex>
     </div>
